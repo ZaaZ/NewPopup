@@ -98,7 +98,7 @@ void popupmsg::showMessage()
     QFontMetrics fm(this->font());
     QString tmp = ui->labelMsg->toolTip();
     if (openMessage){
-     QRect textRect = fm.boundingRect(QRect(QPoint(0,0),QPoint(openWidth,100)),Qt::TextWordWrap,tmp);
+     QRect textRect = fm.boundingRect(QRect(QPoint(0,0),QPoint(openwidthText,100)),Qt::TextWordWrap,tmp);
      qDebug() << textRect;
      ui->labelMsg->setText(tmp);
      ui->labelMsg->resize(textRect.width(),textRect.height());

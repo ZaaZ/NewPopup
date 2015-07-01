@@ -6,6 +6,7 @@
 static int closeWidth = 360;
 static int closeHeight = 120;
 static int widthText = 280;
+static int openwidthText = 540;
 static int heightText = 100;
 static int openWidth = 620;
 
