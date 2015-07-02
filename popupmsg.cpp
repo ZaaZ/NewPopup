@@ -71,6 +71,12 @@ void popupmsg::paintEvent(QPaintEvent *event)
 void popupmsg::mouseDoubleClickEvent(QMouseEvent *event)
 {
         qDebug() << "Double Click";
+    emit deleteMsg();
+    QWidget::mouseDoubleClickEvent(event);
+}
+
+void popupmsg::mousePressEvent(QMouseEvent *event)
+{
     if (bigMsg){
         if (openMessage)
             openMessage = false;
@@ -79,7 +85,7 @@ void popupmsg::mouseDoubleClickEvent(QMouseEvent *event)
         showMessage();
         emit openedMsg(openMessage);
     }
-    QWidget::mouseDoubleClickEvent(event);
+    QWidget::mousePressEvent(event);
 }
 
 

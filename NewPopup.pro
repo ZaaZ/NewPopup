@@ -14,10 +14,16 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    popupmsg.cpp
+    popupmsg.cpp \
+    countmsg.cpp
 
 HEADERS  += mainwindow.h \
-    popupmsg.h
+    popupmsg.h \
+    countmsg.h
 
 FORMS    += mainwindow.ui \
-    popupmsg.ui
+    popupmsg.ui \
+    countmsg.ui
+
+RESOURCES += \
+    resource.qrc

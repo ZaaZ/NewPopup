@@ -30,9 +30,11 @@ public:
 private:
     void paintEvent(QPaintEvent *event );
     void mouseDoubleClickEvent ( QMouseEvent * event );
+    void mousePressEvent(QMouseEvent * event);
 
 signals:
     void openedMsg(bool);
+    void deleteMsg();
 
 private:
     Ui::popupmsg *ui;

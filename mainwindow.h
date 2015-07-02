@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "popupmsg.h"
+#include "countmsg.h"
 
 #include <QHash>
 #include <QMainWindow>
@@ -23,10 +24,12 @@ public:
 private slots:
     void on_pushButton_clicked();
     void openedMessage(bool show);
+    void deleteMsg();
 
 private:
     Ui::MainWindow *ui;
     popupmsg *popup;
+    CountMsg *cntmsg;
     QHash<QString, QWidget *> popups;
     int coordY;
 };
