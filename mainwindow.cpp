@@ -88,5 +88,5 @@ void MainWindow::deleteMsg()
     popups.remove(key);
     qDebug() << "Delete msg 4";
     tmpMsg->hide();
-    delete tmpMsg;
+    //delete tmpMsg;
 }

@@ -4,6 +4,7 @@
 #include <QPainter>
 #include <QDebug>
 #include <QGraphicsDropShadowEffect>
+#include <QMouseEvent>
 
 popupmsg::popupmsg(QWidget *parent) :
     QWidget(parent),
@@ -21,6 +22,7 @@ popupmsg::popupmsg(QWidget *parent) :
     effect->setYOffset(5);
     setGraphicsEffect(effect);
     resize(closeWidth, closeHeight);
+    ui->labelClose->hide();
 }
 
 popupmsg::~popupmsg()
@@ -70,13 +72,19 @@ void popupmsg::paintEvent(QPaintEvent *event)
 
 void popupmsg::mouseDoubleClickEvent(QMouseEvent *event)
 {
-        qDebug() << "Double Click";
-    emit deleteMsg();
+    //    qDebug() << "Double Click";
+    //emit deleteMsg();
     QWidget::mouseDoubleClickEvent(event);
 }
 
 void popupmsg::mousePressEvent(QMouseEvent *event)
 {
+    if (!openMessage){
+        if ((this->width()-event->pos().x()) < 20 || (this->height()-event->pos().y()) < 20 ){
+            emit deleteMsg();
+            return;
+        }
+    }
     if (bigMsg){
         if (openMessage)
             openMessage = false;
@@ -85,9 +93,30 @@ void popupmsg::mousePressEvent(QMouseEvent *event)
         showMessage();
         emit openedMsg(openMessage);
     }
+    qDebug() << event->pos();
     QWidget::mousePressEvent(event);
 }
 
+void popupmsg::mouseMoveEvent(QMouseEvent *event)
+{
+    qDebug() << "QMouseEvent::pos()";
+}
+
+bool popupmsg::event(QEvent *e)
+{
+    qDebug() << e->type();
+    QWidget::event(e);
+}
+
+void popupmsg::enterEvent(QEvent *e)
+{
+    ui->labelClose->show();
+}
+
+void popupmsg::leaveEvent(QEvent *e)
+{
+    ui->labelClose->hide();
+}
 
 bool popupmsg::getFile() const
 {
