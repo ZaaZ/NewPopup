@@ -80,7 +80,7 @@ void popupmsg::mouseDoubleClickEvent(QMouseEvent *event)
 void popupmsg::mousePressEvent(QMouseEvent *event)
 {
     if (!openMessage){
-        if ((this->width()-event->pos().x()) < 20 || (this->height()-event->pos().y()) < 20 ){
+        if ((this->width()-event->pos().x()) < 20 && (this->height()-event->pos().y()) < 20 ){
             emit deleteMsg();
             return;
         }

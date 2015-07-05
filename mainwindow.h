@@ -6,8 +6,20 @@
 
 #include <QHash>
 #include <QMainWindow>
+#include <QThread>
 
 static int interval_msg = 10;
+
+
+class Sleeper: public QThread
+{
+    public:
+        static void msleep(int ms)
+        {
+            QThread::msleep(ms);
+        }
+};
+
 
 namespace Ui {
 class MainWindow;
@@ -30,7 +42,8 @@ private:
     Ui::MainWindow *ui;
     popupmsg *popup;
     CountMsg *cntmsg;
-    QHash<QString, QWidget *> popups;
+    //QHash<QString, popupmsg *> popups;
+    QList<popupmsg *> *popups;
     int coordY;
 };
 
