@@ -31,8 +31,6 @@ private:
     void paintEvent(QPaintEvent *event );
     void mouseDoubleClickEvent ( QMouseEvent * event );
     void mousePressEvent(QMouseEvent * event);
-    void mouseMoveEvent ( QMouseEvent * event );
-    bool event(QEvent *e);
     void enterEvent(QEvent *e);
     void leaveEvent(QEvent *e);
 

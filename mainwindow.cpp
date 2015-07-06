@@ -24,6 +24,30 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    bool isHideMsg = false;
+    int x;
+    for (int i = 0; i < popups->size(); i++){
+        popupmsg *tmpP = popups->at(i);
+        x = width()-tmpP->width()-interval_msg;
+        tmpP->move(x,tmpP->y());
+        if (height()-tmpP->height()-interval_msg > tmpP->y())
+            tmpP->show();
+        else {
+            tmpP->hide();
+            isHideMsg = true;
+        }
+    }
+    if (x - interval_msg - cntmsg->width() > 0 && isHideMsg){
+        cntmsg->move(x - interval_msg - cntmsg->width(),20);
+        cntmsg->show();
+    } else {
+        cntmsg->hide();
+    }
+    QWidget::resizeEvent(event);
+}
+
 void MainWindow::on_pushButton_clicked()
 {
 //    if (popup){
@@ -54,8 +78,9 @@ void MainWindow::on_pushButton_clicked()
     else {
             qDebug() << "Update cntmsg";
             cntmsg->setCount(popups->size());
-            if (cntmsg->isHidden()){
-                cntmsg->move(x - interval_msg - cntmsg->width(),20);
+            int cntMsgX = x - interval_msg - cntmsg->width();
+            if (cntmsg->isHidden() && cntMsgX > 0){
+                cntmsg->move(cntMsgX,20);
                 cntmsg->show();
             }
             else
@@ -70,21 +95,35 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::openedMessage(bool show)
 {
     popupmsg *tmpMsg = qobject_cast<popupmsg *> (sender());
+    int num = popups->indexOf(tmpMsg);
     if (show){
         //показываем
         tmpMsg->move(width()-tmpMsg->width()-interval_msg,tmpMsg->y());
-
+        coordY = tmpMsg->y() + tmpMsg->height() + interval_msg;
     } else {
         //скрываем
         tmpMsg->move(width()-tmpMsg->width()-interval_msg,tmpMsg->y());
+        coordY = tmpMsg->y() + tmpMsg->height() + interval_msg;
     }
+        for (int i = num+1; i < popups->size(); i++){
+            popupmsg *tmpP = popups->at(i);
+            tmpP->move(tmpP->x(),coordY);
+            coordY = tmpP->y()+tmpP->height()+interval_msg;
+            if (coordY > height())
+                tmpP->hide();
+            else
+                tmpP->show();
+        }
+
     //перерисовываем сообщения ниже
 }
 
 void MainWindow::deleteMsg()
-{    
+{        
     popupmsg *tmpMsg = qobject_cast<popupmsg *> (sender());
+    disconnect(tmpMsg,SIGNAL(deleteMsg()),this,SLOT(deleteMsg()));
     int offsetMsg = tmpMsg->height()+interval_msg;
+    qDebug() << offsetMsg;
     int num = popups->indexOf(tmpMsg);
     popups->removeAt(num);
     QGraphicsOpacityEffect *opacityEffect = new QGraphicsOpacityEffect(this);
@@ -95,14 +134,19 @@ void MainWindow::deleteMsg()
         Sleeper::msleep(50);
     }
     tmpMsg->hide();
-    for (int i = num; i < popups->size(); i++){
-         popups->at(i)->move(popups->at(i)->x(),popups->at(i)->y()-10);
-         if (popups->at(i)->isHidden()){
-                popups->at(i)->show();
-                break;
+    int cntIter = (int) offsetMsg/ (int) 40;
+    int cntOst = offsetMsg-cntIter*40;
+    qDebug() << cntIter << cntOst;
+
+    if (cntOst > 0)
+        for (int i = num; i < popups->size(); i++){
+             popups->at(i)->move(popups->at(i)->x(),popups->at(i)->y()-cntOst);
+             if (popups->at(i)->isHidden()){
+                    popups->at(i)->show();
+                    break;
+                }
             }
-        }
-    for (int i = 1; i < 4; i++) {
+    for (int i = 1; i <= cntIter; i++) {
         QApplication::processEvents();
         //Sleeper::msleep(5);
         for (int x = num; x < popups->size(); x++){

@@ -79,12 +79,12 @@ void popupmsg::mouseDoubleClickEvent(QMouseEvent *event)
 
 void popupmsg::mousePressEvent(QMouseEvent *event)
 {
-    if (!openMessage){
+    //if (!openMessage){
         if ((this->width()-event->pos().x()) < 20 && (this->height()-event->pos().y()) < 20 ){
-            emit deleteMsg();
+            emit deleteMsg();            
             return;
         }
-    }
+    //}
     if (bigMsg){
         if (openMessage)
             openMessage = false;
@@ -95,17 +95,6 @@ void popupmsg::mousePressEvent(QMouseEvent *event)
     }
     qDebug() << event->pos();
     QWidget::mousePressEvent(event);
-}
-
-void popupmsg::mouseMoveEvent(QMouseEvent *event)
-{
-    qDebug() << "QMouseEvent::pos()";
-}
-
-bool popupmsg::event(QEvent *e)
-{
-    qDebug() << e->type();
-    QWidget::event(e);
 }
 
 void popupmsg::enterEvent(QEvent *e)
@@ -133,21 +122,20 @@ void popupmsg::showMessage()
     QFontMetrics fm(this->font());
     QString tmp = ui->labelMsg->toolTip();
     if (openMessage){
-     QRect textRect = fm.boundingRect(QRect(QPoint(0,0),QPoint(openwidthText,100)),Qt::TextWordWrap,tmp);
+     QRect textRect = fm.boundingRect(QRect(QPoint(0,0),QPoint(widthText,100)),Qt::TextWordWrap,tmp);
      qDebug() << textRect;
      ui->labelMsg->setText(tmp);
      ui->labelMsg->resize(textRect.width(),textRect.height());
-     resize(openWidth, textRect.height()+19);
-     qDebug() << rect();
+     resize(closeWidth, textRect.height()+19);
     } else {
         ui->labelMsg->resize(widthText,heightText);
         int row = (int) ui->labelMsg->height() / (int) fm.height();
         int fullwidth = row * ui->labelMsg->width();
         QString elidText = fm.elidedText(tmp,Qt::ElideRight, fullwidth-150);
         ui->labelMsg->setText(elidText);
-        resize(closeWidth,closeHeight);
-        qDebug() << rect();
+        resize(closeWidth,closeHeight);        
     }
+    ui->labelClose->move(width()-20,height()-20);
 }
 
 

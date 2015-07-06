@@ -33,6 +33,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    void resizeEvent(QResizeEvent * event);
+
 private slots:
     void on_pushButton_clicked();
     void openedMessage(bool show);
